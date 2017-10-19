@@ -1,0 +1,79 @@
+﻿<div class="panel panel-success ">
+    <div class="panel-heading" style="font-size:large">My Reel</div>
+    <div class="panel-body">
+        <div>
+            Name :
+            <input type="text" style="width: 300px" ng-model="myReelName" ng-show="isEditing" autofocus>
+            <span class="btn btn-link glyphicon glyphicon-floppy-save" ng-show="isEditing" ng-click="isEditing = !isEditing;"></span>
+
+            <span ng-show="!isEditing">{{myReelName}}</span>
+            <span class="btn btn-link glyphicon glyphicon-edit" ng-show="!isEditing" ng-click="isEditing = !isEditing;"></span>
+        </div>
+
+        <div>Select from video clips below : </div>
+        <ul ng-repeat="clip in myReel">
+            <img src="images/reel.png" height="30" /> {{clip.Name}} |
+            <span class="btn btn-link glyphicon glyphicon-remove" ng-click="updateReel(clip)"></span>
+        </ul>
+        <div ng-if="myReelDefinition">
+            Definition :
+            <span>
+                <img ng-if="myReelDefinition == 1" src="images/SD.png" height="30" />
+                <img ng-if="myReelDefinition == 2" src="images/HD.png" height="30" />
+            </span>
+        </div>
+        <div ng-if="myReelStandard">
+            Standard :
+            <span>
+                <img ng-if="myReelStandard == 1" src="images/pal.png" height="30" />
+                <img ng-if="myReelStandard == 2" src="images/ntsc.png" height="30" />
+            </span>
+        </div>
+        <div>Total : {{myReelTimeCode()}}</div>
+    </div>
+</div>
+<div class="panel panel-primary ">
+    <div class="panel-heading" style="font-size:large">All Clips</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-2">Filter by:</div>
+            <div class="col-md-4"><input type="text" ng-model="listFilter" /></div>
+        </div>
+        <div class="row" ng-show="listFilter">
+            <h3>Reels filtered by {{listFilter}}:</h3>
+        </div>
+        <div class="table-responsive">
+            <table class="table"
+                   ng-if="clips.length">
+                <thead>
+                    <tr>
+                        <td></td>
+                        <td style="vertical-align: bottom">Name</td>
+                        <td style="vertical-align: bottom">Definition</td>
+                        <td style="vertical-align: bottom">Standard</td>
+                        <td style="vertical-align: bottom">Description</td>
+                        <td style="vertical-align: bottom">Time Code</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="clip in clips | filter : {Name:listFilter} | orderBy : 'Definition'">
+                        <td><input type="checkbox" ng-model="clip.isSelected" ng-disabled="clip.isDisabled" ng-click="updateReel(clip)" /></td>
+                        <td>
+                            {{ clip.Name | uppercase}}
+                        </td>
+                        <td>
+                            <img ng-if="clip.Definition == 1" src="images/SD.png" height="30" />
+                            <img ng-if="clip.Definition == 2" src="images/HD.png" height="30" />
+                        </td>
+                        <td>
+                            <img ng-if="clip.Standard == 1" src="images/pal.png" height="30" />
+                            <img ng-if="clip.Standard == 2" src="images/ntsc.png" height="30" />
+                        </td>
+                        <td class="col-lg-7">{{ clip.Description }}</td>
+                        <td>{{ clip.TimeCode.TimeCodeString }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
